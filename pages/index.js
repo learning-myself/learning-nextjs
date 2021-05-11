@@ -13,16 +13,16 @@
 import styles from './index.module.scss';
 import Link from 'next/link';
 
-export async function getServerSideProps() {
-  const res = await fetch('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
-  const posts = await res.json();
+// export async function getServerSideProps() {
+//   const res = await fetch('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
+//   const posts = await res.json();
 
-  return {
-    props: {
-      posts
-    }
-  }
-}
+//   return {
+//     props: {
+//       posts
+//     }
+//   }
+// }
 
 export default function Home({ posts }) {
 
