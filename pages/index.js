@@ -1,34 +1,39 @@
-import Head from 'next/head'
-import { getSortedPostsData } from '../lib/posts'
+// export async function getStaticProps() {
+//   const res = await fetch('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
+//   const posts = await res.json();
 
-export async function getStaticProps() {
-  const allPostsData = getSortedPostsData()
+//   return {
+//     props: {
+//       posts
+//     },
+//     revalidate: 1,
+//   }
+// }
+
+import styles from './index.module.scss';
+import Link from 'next/link';
+
+export async function getServerSideProps() {
+  const res = await fetch('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
+  const posts = await res.json();
+
   return {
     props: {
-      allPostsData
+      posts
     }
   }
 }
 
-export default function Home({ allPostsData }) {
+export default function Home({ posts }) {
+
   return (
-    <Layout home>
-      <Head>…</Head>
-      <section className={utilStyles.headingMd}>…</section>
-      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
-        <h2 className={utilStyles.headingLg}>Blog</h2>
-        <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, date, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              {title}
-              <br />
-              {id}
-              <br />
-              {date}
-            </li>
-          ))}
-        </ul>
-      </section>
-    </Layout>
+    <div className={styles.wrapper}>
+      {
+        posts.map(item => (
+          <div keu={item.id}>{item.name}</div>
+        ))
+      }
+      <img src="/vercel.svg" alt="me" />
+    </div>
   )
 }
