@@ -17,12 +17,20 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const { data } = await axios.get(`https://5cc2bf77968a0b001496d996.mockapi.io/api/products/${params.id}`);
+  const post = await axios
+    .get(`https://5cc2bf77968a0b001496d996.mockapi.io/api/products/${params.id}`)
+    .then(response => response.data)
+    .catch(() => ({
+      id: params.id,
+      name: 'unknown'
+    }))
+  ;
 
   return {
     props: {
-      post: data
-    }
+      post
+    },
+    revalidate: 10
   }
 }
 

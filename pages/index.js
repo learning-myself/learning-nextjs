@@ -1,9 +1,13 @@
 import axios from 'axios';
 
 export async function getStaticProps() {
-  const { data } = await axios.get('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
+  const posts = await axios
+    .get('https://5cc2bf77968a0b001496d996.mockapi.io/api/products')
+    .then(response => response.data)
+    .catch(() => ([]))
+  ;
 
-  console.log(data);
+  console.log(posts);
 
   // if (data.length === 0) {
   //   return {
@@ -13,9 +17,9 @@ export async function getStaticProps() {
 
   return {
     props: {
-      posts: data
+      posts
     },
-    // revalidate: 1,
+    revalidate: 10,
   }
 }
 
