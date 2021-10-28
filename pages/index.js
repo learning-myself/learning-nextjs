@@ -1,4 +1,7 @@
-import axios from 'axios';
+import axios  from 'axios';
+import useSWR from 'swr'
+import styles from './index.module.scss';
+import Link   from 'next/link';
 
 export async function getStaticProps() {
   const posts = await axios
@@ -16,15 +19,12 @@ export async function getStaticProps() {
   // }
 
   return {
-    props: {
+    props     : {
       posts
     },
     revalidate: 10,
   }
 }
-
-import styles from './index.module.scss';
-import Link from 'next/link';
 
 // export async function getServerSideProps() {
 //   const res = await fetch('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
@@ -37,9 +37,17 @@ import Link from 'next/link';
 //   }
 // }
 
-export default function Home({ posts }) {
-
-  console.log(posts);
+export default function Home({ posts: initialPosts }) {
+  const { data: posts } = useSWR(
+    'products',
+    () => axios
+      .get('https://5cc2bf77968a0b001496d996.mockapi.io/api/products')
+      .then(response => response.data)
+      .catch(() => ([])),
+    {
+      fallbackData: initialPosts
+    }
+  )
 
   return (
     <div className={styles.wrapper}>
@@ -51,7 +59,7 @@ export default function Home({ posts }) {
           </div>
         ))
       }
-      <img src="/vercel.svg" alt="me" />
+      <img src="/vercel.svg" alt="me"/>
     </div>
   )
 }
