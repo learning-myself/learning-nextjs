@@ -1,9 +1,9 @@
-import axios from 'axios';
+import axios from "axios";
 
 export async function getStaticProps() {
-  const { data } = await axios.get('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
-
-  console.log(data);
+  const { data } = await axios.get(
+    "https://5cc2bf77968a0b001496d996.mockapi.io/api/products"
+  );
 
   // if (data.length === 0) {
   //   return {
@@ -13,14 +13,14 @@ export async function getStaticProps() {
 
   return {
     props: {
-      posts: data
+      posts: data,
     },
-    // revalidate: 1,
-  }
+    revalidate: 10,
+  };
 }
 
-import styles from './index.module.scss';
-import Link from 'next/link';
+import styles from "./index.module.scss";
+import Link from "next/link";
 
 // export async function getServerSideProps() {
 //   const res = await fetch('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
@@ -34,20 +34,15 @@ import Link from 'next/link';
 // }
 
 export default function Home({ posts }) {
-
-  console.log(posts);
-
   return (
     <div className={styles.wrapper}>
-      {
-        posts.length > 0 && posts.map(item => (
-          // <div key={item.id}>{item.name}</div>
+      {posts.length > 0 &&
+        posts.map((item) => (
           <div key={item.id}>
             <Link href={`/posts/${item.id}`}>{item.name}</Link>
           </div>
-        ))
-      }
+        ))}
       <img src="/vercel.svg" alt="me" />
     </div>
-  )
+  );
 }
