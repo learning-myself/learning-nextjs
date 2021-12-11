@@ -18,42 +18,57 @@ import axios from "axios";
 //   };
 // }
 
-export const getStaticPaths = async () => {
-  let paths;
-  try {
-    const { data } = await axios.get(
-      "https://5cc2bf77968a0b001496d996.mockapi.io/api1/products"
-    );
-    paths = data.map((item) => ({
-      params: {
-        id: item.id,
-      },
-    }));
-  } catch (err) {
-    paths = [];
-  }
-  console.log("paths", paths);
-  return {
-    paths,
-    fallback: true,
-  };
-};
+// export const getStaticPaths = async () => {
+//   let paths;
+//   try {
+//     const { data } = await axios.get(
+//       "https://5cc2bf77968a0b001496d996.mockapi.io/api/products"
+//     );
+//     paths = data.map((item) => ({
+//       params: {
+//         id: item.id,
+//       },
+//     }));
+//   } catch (err) {
+//     paths = [];
+//   }
+//   console.log("paths", paths);
+//   return {
+//     paths,
+//     fallback: "blocking",
+//   };
+// };
 
-export async function getStaticProps({ params }) {
+// export async function getStaticProps({ params }) {
+//   const post = await axios
+//     .get(
+//       `https://5cc2bf77968a0b001496d996.mockapi.io/api/products/${params.id}`
+//     )
+//     .then((response) => response.data)
+//     .catch(() => null);
+//   console.log("params", params, post);
+//   return {
+//     props: {
+//       post,
+//     },
+//     // revalidate: 10,
+//   };
+// }
+
+export const getServerSideProps = async ({ params }) => {
+  console.log(params);
   const post = await axios
     .get(
       `https://5cc2bf77968a0b001496d996.mockapi.io/api/products/${params.id}`
     )
     .then((response) => response.data)
     .catch(() => null);
-  console.log("params", params, post);
   return {
     props: {
       post,
     },
-    // revalidate: 10,
   };
-}
+};
 
 function Post({ post }) {
   const router = useRouter();
