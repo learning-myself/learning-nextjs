@@ -2,28 +2,37 @@ import axios from "axios";
 import useSWR from "swr";
 import styles from "./index.module.scss";
 import Link from "next/link";
-import { NextPage } from "next";
+import { NextPage, GetStaticProps } from "next";
 
-export async function getStaticProps() {
+// type Post = {
+//   id: string,
+//   name: string,
+//   price: number,
+//   status: boolean,
+// };
+
+export const getStaticProps = async () => {
   const posts = await axios
     .get("https://5cc2bf77968a0b001496d996.mockapi.io/api/products")
     .then((response) => response.data)
-    .catch(() => []);
-  console.log(posts);
+    .catch(() => null);
 
-  // if (data.length === 0) {
-  //   return {
-  //     notFound: true,
-  //   }
-  // }
+  if (!posts) {
+    return {
+      redirect: {
+        destination: "/about",
+        permanent: false,
+      },
+    };
+  }
 
   return {
     props: {
       posts,
     },
-    revalidate: 10,
+    // revalidate: 10,
   };
-}
+};
 
 // export async function getServerSideProps() {
 //   const res = await fetch('https://5cc2bf77968a0b001496d996.mockapi.io/api/products');
@@ -36,7 +45,7 @@ export async function getStaticProps() {
 //   }
 // }
 
-const Home: NextPage = ({ posts }) => {
+const Home = ({ posts }) => {
   // const { data: posts } = useSWR(
   //   "products",
   //   () =>
@@ -51,13 +60,16 @@ const Home: NextPage = ({ posts }) => {
 
   return (
     <div className={styles.wrapper}>
-      {posts.length > 0 &&
-        posts.map((item: any) => (
+      {posts?.length > 0 ? (
+        posts.map((item) => (
           // <div key={item.id}>{item.name}</div>
           <div key={item.id}>
             <Link href={`/posts/${item.id}`}>{item.name}</Link>
           </div>
-        ))}
+        ))
+      ) : (
+        <div>Failed</div>
+      )}
       <img src="/vercel.svg" alt="me" />
     </div>
   );
