@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import axios from "axios";
+import { GetServerSideProps, NextPage } from "next";
 
 // export async function getStaticPaths() {
 //   const { data } = await axios.get(
@@ -55,7 +56,7 @@ import axios from "axios";
 //   };
 // }
 
-export const getServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   console.log(params);
   const post = await axios
     .get(
@@ -70,7 +71,7 @@ export const getServerSideProps = async ({ params }) => {
   };
 };
 
-function Post({ post }) {
+const Post: NextPage = ({ post }) => {
   const router = useRouter();
   // const { id } = router.query;
   // console.log("post12", post);
@@ -88,6 +89,6 @@ function Post({ post }) {
   ) : (
     <div>failed</div>
   );
-}
+};
 
 export default Post;

@@ -3,15 +3,20 @@ import useSWR from "swr";
 import styles from "./index.module.scss";
 import Link from "next/link";
 import { NextPage, GetStaticProps } from "next";
+import React from "react";
 
-// type Post = {
-//   id: string,
-//   name: string,
-//   price: number,
-//   status: boolean,
-// };
+type Post = {
+  id: string;
+  name: string;
+  price: number;
+  status: boolean;
+};
 
-export const getStaticProps = async () => {
+type Props = {
+  posts: Post[];
+};
+
+export const getStaticProps: GetStaticProps = async () => {
   const posts = await axios
     .get("https://5cc2bf77968a0b001496d996.mockapi.io/api/products")
     .then((response) => response.data)
@@ -45,7 +50,7 @@ export const getStaticProps = async () => {
 //   }
 // }
 
-const Home = ({ posts }) => {
+const Home: NextPage<Props> = ({ posts }) => {
   // const { data: posts } = useSWR(
   //   "products",
   //   () =>
